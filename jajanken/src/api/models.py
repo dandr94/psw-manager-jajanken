@@ -5,10 +5,10 @@ from django.db import models
 class PasswordManager(models.Model):
     WEBSITE_NAME_MAX_CHAR = 50
     WEBSITE_NAME_MIN_CHAR = 2
-    WEBSITE_NAME_VERBOSE_NAME = "Name"
+    WEBSITE_NAME_VERBOSE_NAME = "Website name"
 
     WEBSITE_URL_MAX_CHAR = 200
-    WEBSITE_URL_VERBOSE_NAME = 'URL'
+    WEBSITE_URL_VERBOSE_NAME = 'Website URL'
 
     WEBSITE_ACCOUNT_NAME_MAX_CHAR = 50
     WEBSITE_ACCOUNT_NAME_VERBOSE_NAME = 'Account name'
