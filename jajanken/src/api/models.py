@@ -33,3 +33,7 @@ class PasswordManager(models.Model):
     website_password = models.CharField(max_length=WEBSITE_PASSWORD_MAX_CHAR,
                                         validators=[MinLengthValidator(WEBSITE_PASSWORD_MIN_CHAR)],
                                         verbose_name=WEBSITE_PASSWORD_VERBOSE_NAME)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
