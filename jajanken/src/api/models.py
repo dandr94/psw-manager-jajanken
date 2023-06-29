@@ -37,3 +37,23 @@ class PasswordManager(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class History(models.Model):
+
+    status_choices = [
+        ('created', 'Created'),
+        ('updated', 'Updated'),
+        ('deleted', 'Deleted')
+    ]
+
+    status = models.CharField(
+        max_length=7,
+        choices=status_choices
+    )
+
+    website_name = models.CharField(
+        max_length=2
+    )
+
+    status_changed = models.DateTimeField(auto_now_add=True)
