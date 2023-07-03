@@ -1,14 +1,66 @@
-from rest_framework import generics
+from django.contrib.auth import get_user_model, logout, login, authenticate
+from rest_framework import generics, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import History
-from .serializers import CreateNewPasswordEntrySerializer, UpdatePasswordEntrySerializer, ListHistorySerializer
+from .serializers import CreateNewPasswordEntrySerializer, UpdatePasswordEntrySerializer, ListHistorySerializer, \
+    PasswordManagerSerializer, RegisterUserSerializer
 from .models import PasswordManager
 from .helpers import create_history_entry
 
+UserModel = get_user_model()
 
-class ListCreateNewPasswordEntryView(generics.ListCreateAPIView):
+
+class RegisterUserView(generics.CreateAPIView):
+    queryset = UserModel.objects.all()
+    serializer_class = RegisterUserSerializer
+
+
+class LogoutUserView(APIView):
+    def post(self, request):
+        refresh_token = request.COOKIES.get('refresh_token')
+
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except Exception as e:
+                return Response({'error': 'Invalid token.'}, status=400)
+
+        response = Response()
+        response.delete_cookie('refresh_token')
+        return response
+
+
+class LoginUserView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+        else:
+            return Response({'error': 'Invalid credentials'}, status=400)
+
+
+class CreateNewPasswordEntryView(generics.CreateAPIView):
     serializer_class = CreateNewPasswordEntrySerializer
+    queryset = PasswordManager.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        create_history_entry(status='Created', website_name=self.request.data['website_name'])
+        return super(CreateNewPasswordEntryView, self).create(request, *args, **kwargs)
+
+
+class ListPasswordEntriesView(generics.ListAPIView):
+    serializer_class = PasswordManagerSerializer
     queryset = PasswordManager.objects.all()
 
 
@@ -41,7 +93,6 @@ class UpdateDeletePasswordEntryView(generics.RetrieveUpdateDestroyAPIView):
         entry.delete()
 
         return Response({'message': f'{website_name} deleted successfully'})
-
 
 
 class ListHistoryView(generics.ListAPIView):
