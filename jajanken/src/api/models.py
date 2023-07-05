@@ -93,6 +93,11 @@ class PasswordManager(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True)
 
+    user = models.ForeignKey(
+        JajankenUser,
+        on_delete=models.CASCADE
+    )
+
 
 class History(models.Model):
     status_choices = [
@@ -111,3 +116,8 @@ class History(models.Model):
     )
 
     status_changed = models.DateTimeField(auto_now_add=True)
+
+    user = models.ForeignKey(
+        JajankenUser,
+        on_delete=models.CASCADE
+    )
