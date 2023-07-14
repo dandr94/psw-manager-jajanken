@@ -1,10 +1,12 @@
-from django.contrib.auth import get_user_model, logout, login, authenticate
+from django.contrib.auth import get_user_model, login, authenticate
 from rest_framework import generics, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from .models import History
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from .models import History, JajankenUser
 from .serializers import CreateNewPasswordEntrySerializer, UpdatePasswordEntrySerializer, ListHistorySerializer, \
     PasswordManagerSerializer, RegisterUserSerializer
 from .models import PasswordManager
@@ -13,55 +15,105 @@ from .helpers import create_history_entry
 UserModel = get_user_model()
 
 
-class RegisterUserView(generics.CreateAPIView):
-    queryset = UserModel.objects.all()
+class RegisterUserView(APIView):
     serializer_class = RegisterUserSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
+
+            if user:
+                return Response(status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        refresh_token = request.COOKIES.get('refresh_token')
+        refresh_token = request.data.get('refresh_token')
 
         if refresh_token:
             try:
                 token = RefreshToken(refresh_token)
                 token.blacklist()
+                return Response({'message': 'Logout successful'})
             except Exception as e:
-                return Response({'error': 'Invalid token.'}, status=400)
+                return Response({'message': 'Error during logout'}, status=400)
 
-        response = Response()
-        response.delete_cookie('refresh_token')
-        return response
+        return Response({'message': 'Invalid request'}, status=400)
 
 
 class LoginUserView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
+
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
 
         user = authenticate(username=username, password=password)
+
         if user is not None:
             refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            })
-        else:
-            return Response({'error': 'Invalid credentials'}, status=400)
+            response = Response()
+            response.data = {
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh)
+            }
+            login(request, user)
+            return response
+
+        return Response({'error': 'Invalid credentials'}, status=400)
 
 
 class CreateNewPasswordEntryView(generics.CreateAPIView):
     serializer_class = CreateNewPasswordEntrySerializer
-    queryset = PasswordManager.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = PasswordManager.objects.filter(user=user.id)
+        return queryset
 
     def create(self, request, *args, **kwargs):
-        create_history_entry(status='Created', website_name=self.request.data['website_name'])
-        return super(CreateNewPasswordEntryView, self).create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user_id = request.data.get('user_id')
+            website_name = request.data.get('website_name')
+            if not user_id:
+                return Response({'error': 'User ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user = JajankenUser.objects.get(id=user_id)
+            except JajankenUser.DoesNotExist:
+                return Response({'error': 'Invalid user ID.'}, status=status.HTTP_400_BAD_REQUEST)
+
+                # Set the user ID in the serializer data
+            serializer.validated_data['user_id'] = user_id
+
+            # Save the PasswordManager object
+            self.perform_create(serializer)
+
+            create_history_entry(status='Created', website_name=website_name, user=user)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ListPasswordEntriesView(generics.ListAPIView):
     serializer_class = PasswordManagerSerializer
-    queryset = PasswordManager.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = PasswordManager.objects.filter(user=user.id)
+
+        return queryset
 
 
 class UpdateDeletePasswordEntryView(generics.RetrieveUpdateDestroyAPIView):
@@ -70,7 +122,7 @@ class UpdateDeletePasswordEntryView(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         entry = PasswordManager.objects.get(id=kwargs['pk'])
-
+        user = entry.user
         website_name = entry.website_name
 
         field = request.data.get('field')
@@ -80,7 +132,7 @@ class UpdateDeletePasswordEntryView(generics.RetrieveUpdateDestroyAPIView):
 
         entry.save()
 
-        create_history_entry(status=value, website_name=website_name)
+        create_history_entry(status='Updated', website_name=website_name, user=user)
 
         return Response({'message': 'Account name updated successfully'})
 
@@ -88,7 +140,8 @@ class UpdateDeletePasswordEntryView(generics.RetrieveUpdateDestroyAPIView):
         obj_id = kwargs['pk']
         entry = get_object_or_404(PasswordManager, id=obj_id)
         website_name = entry.website_name
-        create_history_entry(status='Deleted', website_name=website_name)
+        user = entry.user
+        create_history_entry(status='Deleted', website_name=website_name, user=user)
 
         entry.delete()
 
@@ -97,4 +150,10 @@ class UpdateDeletePasswordEntryView(generics.RetrieveUpdateDestroyAPIView):
 
 class ListHistoryView(generics.ListAPIView):
     serializer_class = ListHistorySerializer
-    queryset = History.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = History.objects.filter(user=user.id).order_by('-status_changed')
+        return queryset
+
