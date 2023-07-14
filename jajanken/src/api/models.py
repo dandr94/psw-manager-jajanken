@@ -100,6 +100,9 @@ class PasswordManager(models.Model):
 
 
 class History(models.Model):
+    STATUS_MAX_CHAR = 7
+    WEBSITE_NAME_MAX_CHAR = 2
+
     status_choices = [
         ('created', 'Created'),
         ('updated', 'Updated'),
@@ -107,12 +110,12 @@ class History(models.Model):
     ]
 
     status = models.CharField(
-        max_length=7,
+        max_length=STATUS_MAX_CHAR,
         choices=status_choices
     )
 
     website_name = models.CharField(
-        max_length=2
+        max_length=WEBSITE_NAME_MAX_CHAR
     )
 
     status_changed = models.DateTimeField(auto_now_add=True)
