@@ -1,0 +1,54 @@
+.rwd-table {
+    background: #444359;
+    color: #fff;
+    border-radius: .4em;
+    overflow: hidden;
+    margin: auto;
+    margin-top: 15px;
+}
+
+
+.tr-entries td {
+    padding: 15px;
+    border-top: 1px solid gray;
+    text-align: center;
+}
+
+.tr-title th {
+    padding: 15px;
+}
+
+.middle {
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.green {
+    color: green;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.red {
+    color: red;
+}
+
+.back-btn {
+    font-size: 14px;
+    margin: 0 .5em;
+    border-radius: 2em;
+    padding: 0.75em 1.5em;
+    cursor: pointer;
+    background: none;
+    border: 2px solid;
+    letter-spacing: 1px;
+    color: #4fc08d;
+    transition: 250ms ease-out;
+}
+
+.back-btn:hover {
+    background: #4fc08d;
+    color: white;
+}
