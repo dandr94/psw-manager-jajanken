@@ -1,0 +1,190 @@
+
+  .create, .history {
+    margin: auto;
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .create-btn, .history-btn {
+    font-size: 14px;
+    margin: 0 .5em;
+    border-radius: 2em;
+    padding: 0.75em 1.5em;
+    cursor: pointer;
+    background: none;
+    border: 2px solid;
+    letter-spacing: 1px;
+    color: #4fc08d;
+    transition: 250ms ease-out;
+  
+  }
+  
+  .create-btn:hover, .history-btn:hover{
+    background: #4fc08d;
+    color: white;
+  }
+  
+  .dropdown {
+    width: 100%;
+    max-width: 360px;
+    margin: 30px auto 20px;
+    background: #FFF;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 5px;
+    border: 3px solid #4fc08d;
+  }
+  
+  .dropdown .link {
+    cursor: pointer;
+    display: block;
+    padding: 15px 15px 15px 15px;
+    color: #4D4D4D;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #CCC;
+    position: relative;
+  }
+  
+  .dropdown li:last-child .link { border-bottom: 0; }
+  
+  .dropdown li .icon-arrow {
+    position: absolute;
+    right: 48%;
+    top: 65%;
+    font-size: 16px;
+  }
+  
+  .more-options{
+    position: absolute;
+    right: 13px;
+    top: 5;
+    font-size: 16px;
+  }
+  
+  .submenu {
+    display: none;
+    background: #444359;
+    font-size: 14px;
+  }
+  
+  .submenu li { border-bottom: 1px solid #4b4a5e; }
+  
+  .group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+    
+  }
+  
+  .group .label, .group .text, .group a {
+    flex-basis: 120px;
+    color: #d9d9d9;
+    margin-top: 15px;
+  }
+  
+  .password-text, .group a {
+    text-align: center;
+  }
+  
+  .group a:hover {
+    color: skyblue;
+    text-decoration: underline;
+  }
+  
+  .group input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #d9d9d9;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+  }
+  
+  .group button {
+    background: transparent;
+    border: none;
+    margin: 5px;
+    cursor: pointer;
+    color: #d9d9d9;
+    font-size: 18px;  
+  }
+  .first i {
+    position: absolute;
+    margin-left: 105px;
+  
+  }
+  
+  .link {
+    text-align: center;
+  }
+
+
+  .hidden {
+    display: none;
+  }
+  
+  .remove-focus-outline {
+    outline: none;
+  }
+  
+  .card-buttons {
+    display: flex;
+    margin-top: 10px;
+    justify-content: right;
+  }
+  
+  .delete-entry {
+    margin: auto;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .delete-entry-button {
+    font-size: 5px;
+    margin: 0 .5em;
+    border-radius: 2em;
+    padding: 0.75em 1.5em;
+    cursor: pointer;
+    background: none;
+    border: 2px solid;
+    letter-spacing: 1px;
+    color: #4fc08d;
+    transition: 250ms ease-out;
+    font-size: 15px;
+  }
+  
+  .delete-entry-button:hover{
+    background: #b63b4d;
+    color: white;
+  }
+  
+  
+  .modal-hidden {
+    display: none;
+  }
+  
+  .modal-visible {
+    display: block;
+  }
+
+
+
+  .password-text, .url-text {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+
+  }
+
+  .url-buttons {
+    margin-left: 50px;
+  }
+
+  .logout-btn {
+    text-align: center;
+    padding-top: 15px;
+  }
