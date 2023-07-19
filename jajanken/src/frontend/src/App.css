@@ -1,0 +1,30 @@
+.login-btn, .register-btn{
+  font-size: 14px;
+  margin: 0 .5em;
+  border-radius: 2em;
+  padding: 0.75em 1.5em;
+  cursor: pointer;
+  background: none;
+  border: 2px solid;
+  letter-spacing: 1px;
+  color: #4fc08d;
+  transition: 250ms ease-out;
+
+}
+
+.login-btn:hover, .register-btn:hover{
+  background: #4fc08d;
+  color: white;
+}
+
+
+.buttons-container {
+  display: flex;
+  text-align: center;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.title {
+  color: beige;
+}
