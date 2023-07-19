@@ -1,0 +1,21 @@
+.search-bar {
+    margin: 15px 0 15px 0;
+    text-align: center;
+}
+
+.search-bar input {
+    border-radius: 10px;
+    border: 2px solid #4fc08d;
+    text-align: center;
+    background: transparent;
+    padding: 3px;
+    
+}
+
+.search-bar input::placeholder {
+    font-weight: bold;
+}
+
+.search-bar input:focus {
+    color: white;
+}
