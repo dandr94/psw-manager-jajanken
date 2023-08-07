@@ -3,13 +3,13 @@
 Jajanken is a password manager that allows you to store information about accounts that you are using.
 It uses Django REST Framework for backend and React JS for frontend.
 
-> Currently, not deployed anywhere.
+**Currently, not deployed anywhere.**
 
-```
-Important: This project is nothing serious and is mainly used for me to learn DRF and React.
-There are a lot of missing features that are required to be a full fledged password manager.
+
+> This project is nothing serious and is mainly used for me to learn DRF and React.
+There are a lot of missing features that are required to be a full-fledged password manager.
 Go look somewhere else if you need something serious.
-```
+
 
 ## Features:
 * Full CRUD functionality;
@@ -78,7 +78,7 @@ _Or don't create .env and add them directly in **settings.py**_
 
 ### Ports
 * Backend server runs on port **8000**
-* Frontend server runs on port **3000**
+* Frontend server runs on port **3000**</br>
 ``http://localhost:8000/3000``
 
 
