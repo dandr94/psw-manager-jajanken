@@ -39,7 +39,7 @@ Go look somewhere else if you need something serious.
   cd psw-manager-jajanken/jajanken/src/
 ```
 
-3. Create a **'.env'** and add the following environment variables to your .env:</br>
+3. Create a `.env` and add the following environment variables to your `.env`:</br>
 ```SECRET_KEY=your_secret_key_here```</br>
 ```DEBUG=your_debug_setting_here```</br>
 ```ALLOWED_HOSTS=your_allowd_hosts_here```</br>
@@ -70,15 +70,15 @@ _Or don't create .env and add them directly in **settings.py**_
   npm install
 ```
 
-8. Start the node server:
+8. Start the Node server:
 
 ```bash
   npm start
 ```
 
 ### Ports
-* Backend server runs on port **8000**
-* Frontend server runs on port **3000**</br>
+* Backend server runs on port `8000`
+* Frontend server runs on port `3000`</br>
 ``http://localhost:8000/3000``
 
 
