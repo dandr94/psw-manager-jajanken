@@ -5,7 +5,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import History, JajankenUser
 from .serializers import CreateNewPasswordEntrySerializer, UpdatePasswordEntrySerializer, ListHistorySerializer, \
     PasswordManagerSerializer, RegisterUserSerializer
@@ -79,13 +79,16 @@ class CreateNewPasswordEntryView(generics.CreateAPIView):
     def get_queryset(self):
         user = self.request.user
         queryset = PasswordManager.objects.filter(user=user.id)
+
         return queryset
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data, read_only=False)
         if serializer.is_valid(raise_exception=True):
             user_id = request.data.get('user_id')
             website_name = request.data.get('website_name')
+            password = request.data.get('website_password')
+
             if not user_id:
                 return Response({'error': 'User ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -94,10 +97,9 @@ class CreateNewPasswordEntryView(generics.CreateAPIView):
             except JajankenUser.DoesNotExist:
                 return Response({'error': 'Invalid user ID.'}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Set the user ID in the serializer data
             serializer.validated_data['user_id'] = user_id
+            serializer.validated_data['website_password'] = password
 
-            # Save the PasswordManager object
             self.perform_create(serializer)
 
             create_history_entry(status='Created', website_name=website_name, user=user)
@@ -156,4 +158,3 @@ class ListHistoryView(generics.ListAPIView):
         user = self.request.user
         queryset = History.objects.filter(user=user.id).order_by('-status_changed')
         return queryset
-
