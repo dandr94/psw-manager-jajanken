@@ -48,14 +48,20 @@ const DashboardEntries = ({ entries, searchTerm }) => {
                         className={submenuClass}
                         style={{ display: submenuDisplay }}
                     >
-                        <SubmenuUrl
-                            url={entry.website_url}
-                            entryId={entry.id}
-                        />
-                        <SubmenuAccountName
-                            accountName={entry.website_account_name}
-                            entryId={entry.id}
-                        />
+                        {entry.website_url && (
+                            <SubmenuUrl
+                                url={entry.website_url}
+                                entryId={entry.id}
+                            />
+                        )}
+
+                        {entry.website_account_name && (
+                            <SubmenuAccountName
+                                accountName={entry.website_account_name}
+                                entryId={entry.id}
+                            />
+                        )}
+
                         <SubmenuPassword
                             password={entry.website_password}
                             entryId={entry.id}
