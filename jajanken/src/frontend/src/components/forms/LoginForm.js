@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import handleEnterKey from "../../utils/pressedKeyHandler";
 import { login } from "../../utils/requests";
@@ -6,6 +6,7 @@ import { login } from "../../utils/requests";
 const LoginForm = () => {
     const username = useRef(null);
     const password = useRef(null);
+    const [errorMessage, setErrorMessage] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -16,7 +17,7 @@ const LoginForm = () => {
             password: password.current.value,
         };
 
-        login(formData, navigate);
+        login(formData, navigate, setErrorMessage);
     };
 
     return (
@@ -78,6 +79,9 @@ const LoginForm = () => {
                         />
                     </div>
                 </form>
+                {errorMessage && (
+                    <div className="error-message">{errorMessage}</div>
+                )}
 
                 <svg xmlns="http://www.w3.org/2000/svg" className="icons">
                     <symbol id="icon-lock" viewBox="0 0 1792 1792">
