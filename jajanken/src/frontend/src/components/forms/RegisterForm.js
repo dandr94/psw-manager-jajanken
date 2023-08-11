@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import handleEnterKey from "../../utils/pressedKeyHandler";
 import { register } from "../../utils/requests";
@@ -8,6 +8,7 @@ const RegisterForm = () => {
     const email = useRef(null);
     const password = useRef(null);
     const repeatPassword = useRef(null);
+    const [errorMessage, setErrorMessage] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -20,7 +21,7 @@ const RegisterForm = () => {
             password2: repeatPassword.current.value,
         };
 
-        register(formData, navigate);
+        register(formData, navigate, setErrorMessage);
     };
 
     return (
@@ -119,6 +120,9 @@ const RegisterForm = () => {
                         />
                     </div>
                 </form>
+                {errorMessage && (
+                    <div className="error-message">{errorMessage}</div>
+                )}
 
                 <svg xmlns="http://www.w3.org/2000/svg" className="icons">
                     <symbol id="icon-website-name" viewBox="0 0 576 512">
