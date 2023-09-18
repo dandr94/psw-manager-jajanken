@@ -57,20 +57,29 @@ _Or don't create .env and add them directly in **settings.py**_
 ```bash
   python manage.py runserver
 ```
+6. Migrate:
 
-6. Open new terminal and navigate to the frontend directory:
+```bash
+  python manage.py makemigrations
+  python manage.py migrate
+```
+
+7. Open new terminal and navigate to the frontend directory:
 
 ```bash
   cd psw-manager-jajanken/jajanken/src/frontend/
 ```
+8. Create a `.env` and add the following environment variable to your `.env`:</br>
+```REACT_APP_API_ENDPOINT=your_api_endpoint_here```</br>
+_Or don't create .env and add it directly in **axiosSettings.js** in src/utils folder_
 
-7. Install frontend dependencies:
+9. Install frontend dependencies:
 
 ```bash
   npm install
 ```
 
-8. Start the Node server:
+10. Start the Node server:
 
 ```bash
   npm start
