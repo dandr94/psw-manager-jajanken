@@ -61,7 +61,7 @@ const SubmenuAccountName = ({ accountName, entryId }) => {
                         isFieldVisible={isAccountNameVisible}
                         onVisibilityToggle={handleVisibilityToggle}
                     />
-                    <CopyButton textToCopy={accountName} />
+                    <CopyButton textToCopy={currentAccountName} />
                     <EditButton
                         isEditMode={isEditMode}
                         onEditModeToggle={handleEditModeToggle}

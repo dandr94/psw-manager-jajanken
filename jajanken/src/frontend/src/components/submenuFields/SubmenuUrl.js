@@ -48,7 +48,7 @@ const SubmenuUrl = ({ url, entryId }) => {
                     </a>
                 )}
                 <div className="card-buttons url-buttons">
-                    <CopyButton textToCopy={url} />
+                    <CopyButton textToCopy={currentUrl} />
                     <EditButton
                         isEditMode={isEditMode}
                         onEditModeToggle={handleEditModeToggle}

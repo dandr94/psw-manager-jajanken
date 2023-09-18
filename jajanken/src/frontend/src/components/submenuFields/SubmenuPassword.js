@@ -57,7 +57,7 @@ const SubmenuPassword = ({ password, entryId }) => {
                         isFieldVisible={isPasswordVisible}
                         onVisibilityToggle={handleVisibilityToggle}
                     />
-                    <CopyButton textToCopy={password} />
+                    <CopyButton textToCopy={currentPassword} />
                     <EditButton
                         isEditMode={isEditMode}
                         onEditModeToggle={handleEditModeToggle}
