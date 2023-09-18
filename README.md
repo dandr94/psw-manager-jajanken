@@ -61,6 +61,8 @@ _Or don't create .env and add them directly in **settings.py**_
 
 ```bash
   python manage.py makemigrations
+```
+```bash
   python manage.py migrate
 ```
 
